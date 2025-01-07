@@ -336,6 +336,7 @@ PacArgValue *BasePacContext::getArgValuePtr(uint32_t arg_index, uint32_t not_imm
     if (size == 4) {
         push_pc(4);
         std::memcpy(&arg.value, stack_top->PAC_PC, 4);
+        stack_top->PAC_PC += 4;
     }
     else if (size == 2) {
         push_pc(2);
@@ -344,9 +345,11 @@ PacArgValue *BasePacContext::getArgValuePtr(uint32_t arg_index, uint32_t not_imm
         std::memcpy(&storage, stack_top->PAC_PC, 2);
 
         arg.value.as_int = storage;
+        stack_top->PAC_PC += 2;
     }
     else if (size == 1) {
         arg.value.as_int = *stack_top->PAC_PC;
+        ++stack_top->PAC_PC;
     }
 
     return get_arg_ptr(arg_index);

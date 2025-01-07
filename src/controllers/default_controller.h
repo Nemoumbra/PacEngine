@@ -14,6 +14,6 @@ struct DefaultController : DefaultControllerBase {
     virtual void cmd_end_logger();
 
     REGISTER_COMMAND(cmd_end);
-    REGISTER_COMMAND(cmd_call);
     REGISTER_COMMAND(cmd_jmp);
+    REGISTER_COMMAND(cmd_call);
 };

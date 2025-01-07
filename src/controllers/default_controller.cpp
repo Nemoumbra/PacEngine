@@ -3,13 +3,14 @@
 //
 
 #include "default_controller.h"
+#include "../context/base_context.h"
 
 // TODO: macro this
 static Instruction instructions[] = {
-        {0x0, nullptr, "null"},
-        {0x1, static_cast<Handler>(&DefaultController::cmd_end), "cmd_end"},
-        {0x2, static_cast<Handler>(&DefaultController::cmd_call), "cmd_call"},
-        {0x3, static_cast<Handler>(&DefaultController::cmd_jmp), "cmd_jmp"},
+        REGISTER_TABLE_BEGIN
+        REGISTER_TABLE_CMD(DefaultController, 0x1, cmd_end)
+        REGISTER_TABLE_CMD(DefaultController, 0x2, cmd_jmp)
+        REGISTER_TABLE_CMD(DefaultController, 0x3, cmd_call)
 };
 
 constexpr auto instructions_cnt = sizeof(instructions) / sizeof(instructions[0]);
@@ -26,13 +27,36 @@ void DefaultController::cmd_end_logger() {
 }
 
 void DefaultController::cmd_end(BasePacContext *ctx, int sec_id, int instr_id) {
-
-}
-
-void DefaultController::cmd_call(BasePacContext *ctx, int sec_id, int instr_id) {
+    auto blocks_count = ctx->get_blocks_count();
+    auto undone = ctx->get_undone_calls_count();
+    if (undone == 0) {
+        if (blocks_count == 0) {
+            ctx->set_pac_start(nullptr);
+            this->cmd_end_logger();
+            ctx->setCmdId(0x0);
+        }
+        else {
+            ctx->revert_to_previous_block();
+        }
+    }
+    else {
+        ctx->undo_call();
+        ctx->setCmdId(0x0);
+    }
 
 }
 
 void DefaultController::cmd_jmp(BasePacContext *ctx, int sec_id, int instr_id) {
+    auto dest = ctx->getArgValuePtr(0, 0, 4);
+    ctx->debug_logger(0);
+    ctx->seek(dest->as_int, PacSeekMode::absolute);
+    ctx->setCmdId(0x0);
+}
 
+void DefaultController::cmd_call(BasePacContext *ctx, int sec_id, int instr_id) {
+    auto dest = ctx->getArgValuePtr(0, 0, 4);
+    ctx->debug_logger(0);
+    ctx->save_return_address();
+    ctx->seek(dest->as_int, PacSeekMode::absolute);
+    ctx->setCmdId(0x0);
 }

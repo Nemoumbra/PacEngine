@@ -15,6 +15,8 @@ struct ScriptController : ScriptControllerBase {
 
     REGISTER_COMMAND(dummy);
     REGISTER_COMMAND(setScriptLabelTable);
+    REGISTER_COMMAND(callScriptLabel);
+    REGISTER_COMMAND(callScriptLabelId);
     REGISTER_COMMAND(setCommandMonitor);
     REGISTER_COMMAND(getPack);
 };
