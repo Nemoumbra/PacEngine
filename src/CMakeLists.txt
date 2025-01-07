@@ -4,7 +4,7 @@ project(PacEngine_Library)
 
 add_library(
         PacEngine
-        SHARED
+        STATIC
         context/base_context.cpp
         context/derived_context.cpp
         context/pac_context.cpp

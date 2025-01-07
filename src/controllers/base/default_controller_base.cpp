@@ -6,15 +6,11 @@
 #include "../../instruction.h"
 #include "../../context/base_context.h"
 
-constexpr uint32_t instructions_cnt = 79;
-namespace {
-    extern Instruction instructions[instructions_cnt];
-}
 
-DefaultControllerBase::DefaultControllerBase(uint32_t sec_id):
+DefaultControllerBase::DefaultControllerBase(uint32_t sec_id, Instruction* table_ptr, uint32_t table_elem_cnt):
     section_id(sec_id),
-    instructions(::instructions),
-    instr_cnt(instructions_cnt) {}
+    instructions(table_ptr),
+    instr_cnt(table_elem_cnt) {}
 
 bool DefaultControllerBase::execute(BasePacContext *ctx, uint32_t sec_id, uint32_t cmd_id, uint32_t dt) {
     if (!is_right_sec_id(sec_id)) {
@@ -46,11 +42,3 @@ void DefaultControllerBase::get_handler(Handler *out, uint32_t index) {
         }
     }
 }
-
-////////////////////////////////////////////////////////////////////////////////
-//////////////////// The implementation of the Instructions ////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
-static Instruction instructions[] = {
-
-};

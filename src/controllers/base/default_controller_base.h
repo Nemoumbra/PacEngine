@@ -12,7 +12,7 @@ struct DefaultControllerBase: BaseController {
     Instruction* instructions;
     uint32_t instr_cnt;
 
-    DefaultControllerBase(uint32_t sec_id);
+    DefaultControllerBase(uint32_t sec_id, Instruction* table_ptr, uint32_t table_elem_cnt);
     ~DefaultControllerBase() override = default;
     bool execute(BasePacContext *ctx, uint32_t sec_id, uint32_t cmd_id, uint32_t dt) override;
     int get_something() override;
