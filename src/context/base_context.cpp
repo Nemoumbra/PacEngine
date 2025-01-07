@@ -12,6 +12,7 @@ BasePacContext::BasePacContext(uint32_t int_var_cnt, uint32_t float_var_cnt):
         {
             ctl_wrap_ptr = &controllers[0];
             ctl_wrap_index = 0;
+            reset();
         }
 
 
@@ -247,6 +248,8 @@ lab1:
             }
             block_ptr = blocks + cur_block;
             lab2:
+            pos_ptr = stack_top; // Have to keep it here for lab2:
+        } else {
             pos_ptr = stack_top;
         }
         if (pos_ptr->PAC_start == nullptr) {

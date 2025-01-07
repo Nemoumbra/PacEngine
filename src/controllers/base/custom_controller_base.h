@@ -10,7 +10,7 @@
 struct CustomControllerBase : BaseController {
     CustomControllerBase() = default;
 
-    virtual ~CustomControllerBase() override = default;
+    ~CustomControllerBase() override = default;
     int get_something() override;
     virtual void custom_action();
 };
