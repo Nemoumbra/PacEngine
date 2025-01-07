@@ -13,3 +13,5 @@ void DefaultController::get_handler(Handler *out, uint32_t index) {
 void DefaultController::cmd_end_logger() {
     // Do nothing
 }
+
+//

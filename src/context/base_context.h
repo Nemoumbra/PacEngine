@@ -22,8 +22,8 @@ protected:
     BaseController* controllers[20];
     uint32_t unknown2;
 
-    BaseController* ctl_ptr;
-    uint32_t ctl_index;
+    BaseController** ctl_wrap_ptr;
+    uint32_t ctl_wrap_index;
 
     PacGlobalRuntime* global_runtime;
 
@@ -44,9 +44,9 @@ public:
     uint32_t get_time_delta();
     void set_time_delta(uint32_t dt);
     void* get_pac_start();
-    void set_pac_start(void* start);
+    void set_pac_start(char* start);
     void* get_pc();
-    void set_starting_pc(void* start);
+    void set_starting_pc(char* start);
     void set_label_value(uint32_t index, uint32_t value);
     uint32_t get_label_value(uint32_t index);
     void* seek(uint32_t offset, PacSeekMode mode);
@@ -63,7 +63,7 @@ public:
     uint32_t get_frames_to_skip();
     void set_frames_to_skip(uint32_t value);
     uint32_t get_remaining_time();
-    void get_remaining_time(uint32_t value);
+    void set_remaining_time(uint32_t value);
     bool get_result();
     void set_result(bool value);
     Flags* get_flags();
@@ -74,7 +74,7 @@ public:
     PacArgType get_arg_type(uint32_t arg_index);
     PacArgValue get_arg_value(uint32_t arg_index);
     PacArgValue* get_arg_ptr(uint32_t arg_index);
-    PacArgValue* getArgValuePtr(uint32_t arg_index, uint32_t immediate, uint32_t size);
+    PacArgValue* getArgValuePtr(uint32_t arg_index, uint32_t not_immediate, uint32_t size);
     void debug_logger(uint32_t arg_index);
     void get_string_argument(char* out);
     void make_new_block();

@@ -3,4 +3,4 @@ project(PacEngine)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(PacEngine main.cpp)
+add_subdirectory(src)

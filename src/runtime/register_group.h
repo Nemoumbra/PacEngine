@@ -4,6 +4,7 @@
 
 #pragma once
 #include <cstdint>
+#include "../context/pac_types.h"
 
 struct RegisterGroup {
     int32_t* int_regs;

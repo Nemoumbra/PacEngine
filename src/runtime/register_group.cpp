@@ -27,7 +27,7 @@ int32_t* RegisterGroup::get_int_reg_ptr(int32_t index) {
     return &int_regs[index];
 }
 
-float* RegisterGroup::get_float_reg_ptr(int32_t index) {
+float * RegisterGroup::get_float_reg_ptr(int32_t index) {
     return &float_regs[index];
 }
 int32_t RegisterGroup::get_int_reg(int32_t index) {

@@ -6,14 +6,14 @@
 #include <cstdint>
 
 enum PacArgType : uint8_t {
-    None=0,
-    Index=1,
-    IntImm=2,
-    IntLocal=4,
-    IntGlobal=8,
-    FloatImm=16,
-    FloatLocal=32,
-    FloatGlobal=64
+    None = 0,
+    Index = 1,
+    IntImm = 2,
+    IntLocal = 4,
+    IntGlobal = 8,
+    FloatImm = 16,
+    FloatLocal = 32,
+    FloatGlobal = 64
 };
 
 union PacArgValue {
@@ -28,19 +28,19 @@ struct PacArgument {
 };
 
 struct PacPosition {
-    void* PAC_start;
-    void* PAC_PC;
+    char* PAC_start;
+    char* PAC_PC;
 };
 
 enum PacStatus : uint32_t {
-    Zero=0,
-    One=1,
-    Two=2
+    Zero = 0,
+    One = 1,
+    Two = 2
 };
 
 enum class PacSeekMode {
-    absolute,
-    relative
+    absolute = 0,
+    relative = 1
 };
 
 struct PacBlock {

@@ -5,15 +5,11 @@
 #include "default_controller_base.h"
 #include "../../instruction.h"
 
-static const char* names[] = {
-        "null",
-        "cmd_end",
-        "cmd_call",
-        "cmd_jmp"
-};
 
-constexpr uint32_t instructions_cnt = sizeof(names) / sizeof(names[0]);
-static Instruction instructions[instructions_cnt] = {};
+constexpr uint32_t instructions_cnt = 79;
+namespace {
+    extern Instruction instructions[instructions_cnt];
+}
 
 DefaultControllerBase::DefaultControllerBase(uint32_t sec_id):
     section_id(sec_id),
@@ -28,6 +24,7 @@ bool DefaultControllerBase::execute(PacContext *ctx, uint32_t sec_id, uint32_t c
     Handler handler;
     get_handler(&handler, cmd_id);
     (this->*handler)(ctx, sec_id, cmd_id);
+    return true;
 }
 
 int DefaultControllerBase::get_something() {
@@ -53,3 +50,6 @@ void DefaultControllerBase::get_handler(Handler *out, uint32_t index) {
 //////////////////// The implementation of the Instructions ////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
+static Instruction instructions[] = {
+
+};
