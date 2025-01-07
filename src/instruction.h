@@ -5,7 +5,9 @@
 #pragma once
 #include "controllers/base/base_controller.h"
 
-using Handler = void (BaseController::*)(PacContext* ctx, int sec_id, int instr_id);
+// class PacContext;
+
+using Handler = void (BaseController::*)(BasePacContext* ctx, int sec_id, int instr_id);
 
 struct Instruction {
     int id;

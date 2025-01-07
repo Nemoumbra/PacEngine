@@ -8,7 +8,7 @@
 // Forward declaration
 struct BasePacContext;
 
-#define REGISTER_COMMAND(command_name) void command_name(PacContext* ctx, int sec_id, int instr_id)
+#define REGISTER_COMMAND(command_name) void command_name(BasePacContext* ctx, int sec_id, int instr_id)
 
 struct BaseController {
     virtual ~BaseController() = default;

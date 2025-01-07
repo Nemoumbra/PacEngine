@@ -2,8 +2,6 @@
 // Created by Nemoumbra on 06.01.2025.
 //
 
-#pragma once
-
 #include "base_context.h"
 
 #include "cstring"
@@ -43,7 +41,7 @@ void BasePacContext::reset() {
 
 void BasePacContext::clear() {
     // delete the controllers
-    ctl_wrap_index = 0
+    ctl_wrap_index = 0;
 }
 
 void BasePacContext::set_runtime(PacGlobalRuntime *runtime) {
@@ -282,6 +280,7 @@ lab1:
 uint32_t BasePacContext::register_controller(BaseController *ctl) {
     ctl_wrap_ptr[ctl_wrap_index] = ctl;
     ++ctl_wrap_index;
+    return 1;
 }
 
 void BasePacContext::unregister_controller() {

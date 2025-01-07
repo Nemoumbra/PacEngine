@@ -4,7 +4,7 @@
 
 #include "default_controller_base.h"
 #include "../../instruction.h"
-
+#include "../../context/base_context.h"
 
 constexpr uint32_t instructions_cnt = 79;
 namespace {
@@ -16,11 +16,12 @@ DefaultControllerBase::DefaultControllerBase(uint32_t sec_id):
     instructions(::instructions),
     instr_cnt(instructions_cnt) {}
 
-bool DefaultControllerBase::execute(PacContext *ctx, uint32_t sec_id, uint32_t cmd_id, uint32_t dt) {
+bool DefaultControllerBase::execute(BasePacContext *ctx, uint32_t sec_id, uint32_t cmd_id, uint32_t dt) {
     if (!is_right_sec_id(sec_id)) {
         return false;
     }
-    // TODO: PAC_setTimeDelta
+    ctx->set_time_delta(dt);
+
     Handler handler;
     get_handler(&handler, cmd_id);
     (this->*handler)(ctx, sec_id, cmd_id);

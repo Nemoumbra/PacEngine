@@ -14,7 +14,7 @@ struct DefaultControllerBase: BaseController {
 
     DefaultControllerBase(uint32_t sec_id);
     virtual ~DefaultControllerBase() override = default;
-    bool execute(PacContext *ctx, uint32_t sec_id, uint32_t cmd_id, uint32_t dt) override;
+    bool execute(BasePacContext *ctx, uint32_t sec_id, uint32_t cmd_id, uint32_t dt) override;
     int get_something() override;
     virtual bool is_right_sec_id(uint32_t sec_id);
     virtual void get_handler(Handler* out, uint32_t index);

@@ -68,6 +68,7 @@ uint32_t PacContext::set_script_label_table(uint32_t offset) {
 uint32_t PacContext::set_script_argument(uint32_t value, uint32_t arg_index) {
     RegisterGroup* local_regs = get_locals();
     local_regs->set_int_reg(0x40 + arg_index, value);
+    return 1;
 }
 
 PacContext *PacContext::get_root_context() {
