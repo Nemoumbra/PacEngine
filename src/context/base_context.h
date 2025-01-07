@@ -43,13 +43,13 @@ public:
     uint32_t get_time_multiplier();
     uint32_t get_time_delta();
     void set_time_delta(uint32_t dt);
-    void* get_pac_start();
+    char* get_pac_start();
     void set_pac_start(char* start);
-    void* get_pc();
+    char* get_pc();
     void set_starting_pc(char* start);
     void set_label_value(uint32_t index, uint32_t value);
     uint32_t get_label_value(uint32_t index);
-    void* seek(uint32_t offset, PacSeekMode mode);
+    char* seek(uint32_t offset, PacSeekMode mode);
     void save_return_address();
     void undo_call();
     uint32_t get_undone_calls_count();

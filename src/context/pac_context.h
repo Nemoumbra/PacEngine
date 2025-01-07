@@ -26,7 +26,7 @@ public:
     ~PacContext() override;
     uint32_t run(uint32_t dt) override;
 
-    uint32_t run_script(uint32_t offset, uint32_t dt, uint32_t param_4); // PAC_calls_PAC_reader_08909b58
+    uint32_t run_script(uint32_t offset, uint32_t dt, char* param_4); // PAC_calls_PAC_reader_08909b58
     uint32_t set_script_label_table(uint32_t offset);
     uint32_t set_script_argument(uint32_t value, uint32_t arg_index);
     PacContext* get_root_context();

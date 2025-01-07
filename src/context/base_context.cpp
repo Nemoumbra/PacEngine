@@ -68,7 +68,7 @@ void BasePacContext::set_time_delta(uint32_t dt) {
     blocks[cur_block].cmd_waitTime_dt = dt;
 }
 
-void *BasePacContext::get_pac_start() {
+char *BasePacContext::get_pac_start() {
     return stack_top->PAC_start;
 }
 
@@ -76,7 +76,7 @@ void BasePacContext::set_pac_start(char *start) {
     stack_top->PAC_start = start;
 }
 
-void *BasePacContext::get_pc() {
+char *BasePacContext::get_pc() {
     return stack_top->PAC_PC;
 }
 
@@ -95,7 +95,7 @@ uint32_t BasePacContext::get_label_value(uint32_t index) {
     return labels->labels_ptr[index];
 }
 
-void *BasePacContext::seek(uint32_t offset, PacSeekMode mode) {
+char *BasePacContext::seek(uint32_t offset, PacSeekMode mode) {
     uint32_t mask = get_logging_settings();
     if (mask & 4) {
         // TODO: log
@@ -110,6 +110,8 @@ void *BasePacContext::seek(uint32_t offset, PacSeekMode mode) {
     }
     ptr += offset;
     stack_top->PAC_PC = ptr;
+
+    return ptr;
 }
 
 void BasePacContext::save_return_address() {
