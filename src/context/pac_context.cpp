@@ -42,7 +42,7 @@ uint32_t PacContext::run_script(uint32_t offset, uint32_t dt, char* param_4) {
     get_undone_calls_count();
     get_blocks_count();
     make_new_block();
-    if (param_4 == 0) {
+    if (param_4 == nullptr) {
         set_starting_pc(file_offset);
     } else {
         set_starting_pc(param_4);

@@ -13,7 +13,7 @@ struct DefaultControllerBase: BaseController {
     uint32_t instr_cnt;
 
     DefaultControllerBase(uint32_t sec_id);
-    virtual ~DefaultControllerBase() override = default;
+    ~DefaultControllerBase() override = default;
     bool execute(BasePacContext *ctx, uint32_t sec_id, uint32_t cmd_id, uint32_t dt) override;
     int get_something() override;
     virtual bool is_right_sec_id(uint32_t sec_id);

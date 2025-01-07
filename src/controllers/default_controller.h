@@ -9,7 +9,7 @@
 
 struct DefaultController : DefaultControllerBase {
     DefaultController();
-    ~DefaultController() = default;
+    ~DefaultController() override = default;
     void get_handler(Handler *out, uint32_t index) override;
     virtual void cmd_end_logger();
 

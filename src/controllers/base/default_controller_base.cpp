@@ -41,7 +41,7 @@ void DefaultControllerBase::get_handler(Handler *out, uint32_t index) {
     Instruction* end = instructions + instr_cnt;
     for (; current != end; ++current) {
         if (current->id == index) {
-            out = &current->handler;
+            *out = current->handler;
             return;
         }
     }
