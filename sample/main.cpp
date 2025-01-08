@@ -46,6 +46,7 @@ int main() {
     ctx.set_runtime(&runtime);
     ctx.register_controller(&sec_0x0);
     ctx.register_controller(&sec_0x10);
+    ctx.set_logging_settings(0xffffffff);
 
     const auto path = ask_path();
     auto pac_data = read_file(path);

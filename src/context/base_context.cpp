@@ -98,7 +98,7 @@ uint32_t BasePacContext::get_label_value(uint32_t index) {
 char *BasePacContext::seek(uint32_t offset, PacSeekMode mode) {
     uint32_t mask = get_logging_settings();
     if (mask & 4) {
-        Debugger::PrintLog("[ Pack Seek : from = %d : offset = %d ]\n", static_cast<int>(mode), offset);
+        Debugger::PrintLog("[ Pack Seek : from = {} : offset = {:#x} ]\n", static_cast<int>(mode), offset);
     }
     char* ptr = nullptr;
 
@@ -368,19 +368,19 @@ void BasePacContext::debug_logger(uint32_t arg_index) {
     auto arg = blocks[cur_block].args[arg_index];
 
     Debugger::PrintLog("[ ");
-    Debugger::PrintLog("Arg.%02d : ", arg_index);
+    Debugger::PrintLog("Arg.{:02d} : ", arg_index);
 
     switch (arg.type) {
         case FloatGlobal:
-            Debugger::PrintLog("FloatGlobal.%02d : ", arg.value.as_int);
+            Debugger::PrintLog("FloatGlobal.{:02d} : ", arg.value.as_int);
         case FloatLocal:
-            Debugger::PrintLog("FloatLocal.%02d : ", arg.value.as_int);
+            Debugger::PrintLog("FloatLocal.{:02d} : ", arg.value.as_int);
         case FloatImm:
             Debugger::PrintLog("FloatImm     : ");
         case IntGlobal:
-            Debugger::PrintLog("IntGlobal.%02d : ", arg.value.as_int);
+            Debugger::PrintLog("IntGlobal.{:02d} : ", arg.value.as_int);
         case IntLocal:
-            Debugger::PrintLog("IntLocal.%02d : ", arg.value.as_int);
+            Debugger::PrintLog("IntLocal.{:02d} : ", arg.value.as_int);
         case IntImm:
             Debugger::PrintLog("IntImm       : ");
         case Index:
@@ -390,10 +390,10 @@ void BasePacContext::debug_logger(uint32_t arg_index) {
             break;
     }
 
-    if (arg.type | FloatGlobal | FloatLocal | FloatImm) {
-        Debugger::PrintLog("%.4f", arg_ptr->as_float);
+    if (arg.type & (FloatGlobal | FloatLocal | FloatImm)) {
+        Debugger::PrintLog("{:.4f}", arg_ptr->as_float);
     } else {
-        Debugger::PrintLog("%d", arg_ptr->as_int);
+        Debugger::PrintLog("{:#x}", arg_ptr->as_int);
     }
     Debugger::PrintLog(" ]\n");
 }
