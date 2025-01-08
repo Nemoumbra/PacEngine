@@ -5,6 +5,8 @@
 #include "default_controller_base.h"
 #include "../../context/base_context.h"
 
+#include "../../debugger/debugger.h"
+
 
 DefaultControllerBase::DefaultControllerBase(uint32_t sec_id, Instruction* table_ptr, uint32_t table_elem_cnt):
     section_id(sec_id),
@@ -40,4 +42,5 @@ void DefaultControllerBase::get_handler(Handler *out, uint32_t index) {
             return;
         }
     }
+    Debugger::OnUnknownInstruction(this->section_id, index);
 }

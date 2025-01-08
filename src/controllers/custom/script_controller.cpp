@@ -4,6 +4,8 @@
 
 #include "script_controller.h"
 #include "../../context/base_context.h"
+#include "../../debugger/debugger.h"
+
 
 // TODO: generate this from a list of names and the controller's name
 static Instruction instructions[] = {
@@ -24,37 +26,49 @@ ScriptController::ScriptController():
 
 /// Instructions
 void ScriptController::dummy(BasePacContext *ctx, int sec_id, int instr_id) {
+    LOG_ME
+
     ctx->setCmdId(0x0);
 }
 
 void ScriptController::setScriptLabelTable(BasePacContext *ctx, int sec_id, int instr_id) {
+    LOG_ME
+
     auto offset_arg = ctx->getArgValuePtr(0, 0, 4);
     if (context) {
-        // TODO
+        // TODO fix the ctx to PacContext*
         // ctx->set_script_label_table(offset_arg->as_int);
     }
     ctx->setCmdId(0x0);
 }
 
 void ScriptController::callScriptLabel(BasePacContext *ctx, int sec_id, int instr_id) {
+    LOG_ME
+
     ctx->getArgValuePtr(0, 0, 4);
     ctx->getArgValuePtr(1, 1, 4);
     ctx->setCmdId(0x0);
 }
 
 void ScriptController::callScriptLabelId(BasePacContext *ctx, int sec_id, int instr_id) {
+    LOG_ME
+
     ctx->getArgValuePtr(0, 1, 4);
     ctx->getArgValuePtr(1, 1, 4);
     ctx->setCmdId(0x0);
 }
 
 void ScriptController::setCommandMonitor(BasePacContext *ctx, int sec_id, int instr_id) {
+    LOG_ME
+
     ctx->getArgValuePtr(0, 1, 4);
     ctx->getArgValuePtr(1, 1, 4);
     ctx->setCmdId(0x0);
 }
 
 void ScriptController::getPack(BasePacContext *ctx, int sec_id, int instr_id) {
+    LOG_ME
+
     auto out = ctx->getArgValuePtr(0, 1, 4);
     if (context) {
         auto start = ctx->get_pac_start();

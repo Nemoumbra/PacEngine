@@ -3,8 +3,9 @@
 //
 
 #include "base_context.h"
+#include "../debugger/debugger.h"
 
-#include "cstring"
+#include <cstring>
 
 
 BasePacContext::BasePacContext(uint32_t int_var_cnt, uint32_t float_var_cnt):
@@ -97,7 +98,7 @@ uint32_t BasePacContext::get_label_value(uint32_t index) {
 char *BasePacContext::seek(uint32_t offset, PacSeekMode mode) {
     uint32_t mask = get_logging_settings();
     if (mask & 4) {
-        // TODO: log
+        Debugger::PrintLog("[ Pack Seek : from = %d : offset = %d ]\n", static_cast<int>(mode), offset);
     }
     char* ptr = nullptr;
 
@@ -241,15 +242,18 @@ lab1:
             auto controller = *controller_wrap_ptr;
             while (!controller->execute(this, blocks[cur_block_idx].sec_id, blocks[cur_block_idx].cmd_id, dt)) {
                 if (controller_wrap_ptr + 1 == ctl_wrap_ptr + *ctl_idx_ptr) {
+                    Debugger::OnUnknownInstruction(blocks[cur_block_idx].sec_id, blocks[cur_block_idx].cmd_id);
                     goto lab2;
                 }
                 controller = controller_wrap_ptr[1];
                 ++controller_wrap_ptr;
             }
             block_ptr = blocks + cur_block;
-            lab2:
+lab2:
             pos_ptr = stack_top; // Have to keep it here for lab2:
-        } else {
+        }
+        else {
+            Debugger::OnUnknownInstruction(blocks[cur_block_idx].sec_id, blocks[cur_block_idx].cmd_id);
             pos_ptr = stack_top;
         }
         if (pos_ptr->PAC_start == nullptr) {
@@ -359,29 +363,39 @@ void BasePacContext::debug_logger(uint32_t arg_index) {
     if ((logging_mask & 2) == 0) {
         return;
     }
+    auto* arg_ptr = get_arg_ptr(arg_index);
+
     auto arg = blocks[cur_block].args[arg_index];
 
-    // TODO: log
-    // [
-    // Arg.%02d : arg_index
+    Debugger::PrintLog("[ ");
+    Debugger::PrintLog("Arg.%02d : ", arg_index);
+
     switch (arg.type) {
         case FloatGlobal:
+            Debugger::PrintLog("FloatGlobal.%02d : ", arg.value.as_int);
         case FloatLocal:
+            Debugger::PrintLog("FloatLocal.%02d : ", arg.value.as_int);
         case FloatImm:
+            Debugger::PrintLog("FloatImm     : ");
         case IntGlobal:
+            Debugger::PrintLog("IntGlobal.%02d : ", arg.value.as_int);
         case IntLocal:
+            Debugger::PrintLog("IntLocal.%02d : ", arg.value.as_int);
         case IntImm:
+            Debugger::PrintLog("IntImm       : ");
         case Index:
+            Debugger::PrintLog("Index        : ");
         case None:
+            Debugger::PrintLog("None         : ");
             break;
     }
-    auto* arg_ptr = get_arg_ptr(arg_index);
+
     if (arg.type | FloatGlobal | FloatLocal | FloatImm) {
-        // %f
+        Debugger::PrintLog("%.4f", arg_ptr->as_float);
     } else {
-        // %d
+        Debugger::PrintLog("%d", arg_ptr->as_int);
     }
-    // ]
+    Debugger::PrintLog(" ]\n");
 }
 
 void BasePacContext::get_string_argument(char *out) {

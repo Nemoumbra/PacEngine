@@ -58,4 +58,5 @@ int main() {
     ctx.set_starting_pc(pac_data.value().data());
 
     ctx.run(1);
+    std::cout << "Exited!\n";
 }
