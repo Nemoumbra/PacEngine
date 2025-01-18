@@ -433,7 +433,7 @@ void BasePacContext::push_pc(uint32_t alignment) {
     // Hack
     auto ptr_as_int = reinterpret_cast<std::uintptr_t>(stack_top->PAC_PC);
 
-    auto mask = ~(alignment - 1);
+    auto mask = ~(static_cast<uint64_t>(alignment) - 1);
     ptr_as_int = mask & (ptr_as_int + alignment) - 1;
 
     stack_top->PAC_PC = reinterpret_cast<char*>(ptr_as_int);
