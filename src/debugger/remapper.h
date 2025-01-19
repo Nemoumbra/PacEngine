@@ -85,7 +85,7 @@ public:
     bool RegisterFile(uintptr_t start, uint32_t size, uint32_t virtual_start);
     template<typename T>
     bool RegisterFile(const T* start, uint32_t size, uint32_t virtual_start) {
-        return RegisterFile(static_cast<uintptr_t>(start), size, virtual_start);
+        return RegisterFile(reinterpret_cast<uintptr_t>(start), size, virtual_start);
     }
 
     bool RemapAddress(uint32_t address, uintptr_t* remapped);
@@ -97,6 +97,6 @@ public:
     bool RemapAddress(uintptr_t address, uint32_t* remapped);
     template<typename T>
     bool RemapAddress(const T* address, uint32_t* remapped) {
-        return RemapAddress(static_cast<uintptr_t>(address), remapped);
+        return RemapAddress(reinterpret_cast<uintptr_t>(address), remapped);
     }
 };

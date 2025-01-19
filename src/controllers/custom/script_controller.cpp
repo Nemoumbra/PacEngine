@@ -73,7 +73,11 @@ void ScriptController::getPack(BasePacContext *ctx, int sec_id, int instr_id) {
     if (context) {
         auto start = ctx->get_pac_start();
         // NO!!! 8-byte pointers!
-        // out->as_int = start;
+
+        uint32_t value;
+        Debugger::remapper.RemapAddress(start, &value);
+
+        out->as_int = value;
     }
     ctx->setCmdId(0x0);
 }
