@@ -7,6 +7,7 @@ add_library(
         STATIC
 
         debugger/debugger.cpp
+        debugger/remapper.cpp
 
         context/base_context.cpp
         context/derived_context.cpp

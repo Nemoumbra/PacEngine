@@ -7,6 +7,8 @@
 #include <format>
 #include <iostream>
 
+#include "remapper.h"
+
 
 struct Debugger {
     static void OnUnknownSection(uint32_t sec_id);
@@ -17,4 +19,6 @@ struct Debugger {
     static void PrintLog(const std::format_string<Args...> fmt, Args&&... args) {
         std::cout << std::vformat(fmt.get(), std::make_format_args(args...));
     }
+
+    static Remapper remapper;
 };

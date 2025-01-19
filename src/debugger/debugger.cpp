@@ -4,9 +4,8 @@
 
 #include "debugger.h"
 
-#include <cstdarg>
-#include <cstdio>
-#include <iostream>
+
+Remapper Debugger::remapper;
 
 void Debugger::OnUnknownSection(uint32_t sec_id) {
     PrintLog("Unknown section: 0x{:x}\n", sec_id);
@@ -19,4 +18,3 @@ void Debugger::OnUnknownInstruction(uint32_t sec_id, uint32_t cmd_id) {
 void Debugger::OnCmdEnd() {
     PrintLog("cmd_end: ending script execution!\n");
 }
-
