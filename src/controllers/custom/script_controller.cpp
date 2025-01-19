@@ -20,8 +20,8 @@ static Instruction instructions[] = {
 
 constexpr auto instructions_cnt = sizeof(instructions) / sizeof(instructions[0]);
 
-ScriptController::ScriptController():
-        ScriptControllerBase(0x10, ::instructions, instructions_cnt) {}
+ScriptController::ScriptController(BasePacContext* ctx):
+        ScriptControllerBase(0x10, ::instructions, instructions_cnt), context(ctx) {}
 
 
 /// Instructions

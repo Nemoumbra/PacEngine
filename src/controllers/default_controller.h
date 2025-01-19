@@ -16,4 +16,9 @@ struct DefaultController : DefaultControllerBase {
     REGISTER_COMMAND(cmd_end);
     REGISTER_COMMAND(cmd_jmp);
     REGISTER_COMMAND(cmd_call);
+    REGISTER_COMMAND(cmd_result);
+    REGISTER_COMMAND(cmd_resJmp);
+    REGISTER_COMMAND(cmd_resCall);
+    REGISTER_COMMAND(cmd_mov);
+    REGISTER_COMMAND(cmd_add);
 };

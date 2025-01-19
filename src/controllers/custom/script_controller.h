@@ -9,7 +9,7 @@
 struct ScriptController : ScriptControllerBase {
     BasePacContext* context;
 
-    ScriptController();
+    explicit ScriptController(BasePacContext* ctx);
 
     ~ScriptController() override = default;
 

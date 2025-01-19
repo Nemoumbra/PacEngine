@@ -16,6 +16,10 @@ enum PacArgType : uint8_t {
     FloatGlobal = 64
 };
 
+constexpr bool is_not_float_arg(PacArgType type) {
+    return (type & (FloatImm | FloatLocal | FloatGlobal)) == 0;
+}
+
 union PacArgValue {
     uint32_t as_int;
     float as_float;
