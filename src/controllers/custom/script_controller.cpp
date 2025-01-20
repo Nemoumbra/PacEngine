@@ -25,13 +25,15 @@ ScriptController::ScriptController(BasePacContext* ctx):
 
 
 /// Instructions
-void ScriptController::dummy(BasePacContext *ctx, int sec_id, int instr_id) {
+COMMAND_IMPLEMENTATION(ScriptController, dummy)
+{
     LOG_ME
 
     ctx->setCmdId(0x0);
 }
 
-void ScriptController::setScriptLabelTable(BasePacContext *ctx, int sec_id, int instr_id) {
+COMMAND_IMPLEMENTATION(ScriptController, setScriptLabelTable)
+{
     LOG_ME
 
     auto offset_arg = ctx->getArgValuePtr(0, 0, 4);
@@ -42,7 +44,8 @@ void ScriptController::setScriptLabelTable(BasePacContext *ctx, int sec_id, int 
     ctx->setCmdId(0x0);
 }
 
-void ScriptController::callScriptLabel(BasePacContext *ctx, int sec_id, int instr_id) {
+COMMAND_IMPLEMENTATION(ScriptController, callScriptLabel)
+{
     LOG_ME
 
     ctx->getArgValuePtr(0, 0, 4);
@@ -50,7 +53,8 @@ void ScriptController::callScriptLabel(BasePacContext *ctx, int sec_id, int inst
     ctx->setCmdId(0x0);
 }
 
-void ScriptController::callScriptLabelId(BasePacContext *ctx, int sec_id, int instr_id) {
+COMMAND_IMPLEMENTATION(ScriptController, callScriptLabelId)
+{
     LOG_ME
 
     ctx->getArgValuePtr(0, 1, 4);
@@ -58,7 +62,8 @@ void ScriptController::callScriptLabelId(BasePacContext *ctx, int sec_id, int in
     ctx->setCmdId(0x0);
 }
 
-void ScriptController::setCommandMonitor(BasePacContext *ctx, int sec_id, int instr_id) {
+COMMAND_IMPLEMENTATION(ScriptController, setCommandMonitor)
+{
     LOG_ME
 
     ctx->getArgValuePtr(0, 1, 4);
@@ -66,7 +71,8 @@ void ScriptController::setCommandMonitor(BasePacContext *ctx, int sec_id, int in
     ctx->setCmdId(0x0);
 }
 
-void ScriptController::getPack(BasePacContext *ctx, int sec_id, int instr_id) {
+COMMAND_IMPLEMENTATION(ScriptController, getPack)
+{
     LOG_ME
 
     auto out = ctx->getArgValuePtr(0, 1, 4);

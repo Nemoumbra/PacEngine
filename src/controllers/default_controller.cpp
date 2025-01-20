@@ -37,7 +37,9 @@ void DefaultController::cmd_end_logger() {
     Debugger::OnCmdEnd();
 }
 
-void DefaultController::cmd_end(BasePacContext *ctx, int sec_id, int instr_id) {
+/// Instructions
+COMMAND_IMPLEMENTATION(DefaultController, cmd_end)
+{
     LOG_ME
 
     auto blocks_count = ctx->get_blocks_count();
@@ -56,10 +58,10 @@ void DefaultController::cmd_end(BasePacContext *ctx, int sec_id, int instr_id) {
         ctx->undo_call();
         ctx->setCmdId(0x0);
     }
-
 }
 
-void DefaultController::cmd_jmp(BasePacContext *ctx, int sec_id, int instr_id) {
+COMMAND_IMPLEMENTATION(DefaultController, cmd_jmp)
+{
     LOG_ME
 
     auto dest = ctx->getArgValuePtr(0, 0, 4);
@@ -68,7 +70,8 @@ void DefaultController::cmd_jmp(BasePacContext *ctx, int sec_id, int instr_id) {
     ctx->setCmdId(0x0);
 }
 
-void DefaultController::cmd_call(BasePacContext *ctx, int sec_id, int instr_id) {
+COMMAND_IMPLEMENTATION(DefaultController, cmd_call)
+{
     LOG_ME
 
     auto dest = ctx->getArgValuePtr(0, 0, 4);
@@ -78,14 +81,16 @@ void DefaultController::cmd_call(BasePacContext *ctx, int sec_id, int instr_id) 
     ctx->setCmdId(0x0);
 }
 
-void DefaultController::cmd_result(BasePacContext *ctx, int sec_id, int instr_id) {
+COMMAND_IMPLEMENTATION(DefaultController, cmd_result)
+{
     auto arg = ctx->getArgValuePtr(0, 1, 4);
     ctx->debug_logger(0);
     ctx->set_result(arg->as_int != 0);
     ctx->setCmdId(0);
 }
 
-void DefaultController::cmd_resJmp(BasePacContext *ctx, int sec_id, int instr_id) {
+COMMAND_IMPLEMENTATION(DefaultController, cmd_resJmp)
+{
     auto arg = ctx->getArgValuePtr(0, 1, 4);
     auto dest = ctx->getArgValuePtr(1, 0, 4);
     ctx->debug_logger(0);
@@ -98,7 +103,8 @@ void DefaultController::cmd_resJmp(BasePacContext *ctx, int sec_id, int instr_id
     ctx->setCmdId(0);
 }
 
-void DefaultController::cmd_resCall(BasePacContext *ctx, int sec_id, int instr_id) {
+COMMAND_IMPLEMENTATION(DefaultController, cmd_resCall)
+{
     auto arg = ctx->getArgValuePtr(0, 1, 4);
     auto dest = ctx->getArgValuePtr(1, 0, 4);
     ctx->debug_logger(0);
@@ -112,7 +118,8 @@ void DefaultController::cmd_resCall(BasePacContext *ctx, int sec_id, int instr_i
     ctx->setCmdId(0);
 }
 
-void DefaultController::cmd_mov(BasePacContext *ctx, int sec_id, int instr_id) {
+COMMAND_IMPLEMENTATION(DefaultController, cmd_mov)
+{
     auto arg_1 = ctx->getArgValuePtr(0, 1, 4);
     auto arg_2 = ctx->getArgValuePtr(1, 1, 4);
 
@@ -143,7 +150,8 @@ void DefaultController::cmd_mov(BasePacContext *ctx, int sec_id, int instr_id) {
     ctx->setCmdId(0);
 }
 
-void DefaultController::cmd_add(BasePacContext *ctx, int sec_id, int instr_id) {
+COMMAND_IMPLEMENTATION(DefaultController, cmd_add)
+{
     auto arg_1 = ctx->getArgValuePtr(0, 1, 4);
     auto arg_2 = ctx->getArgValuePtr(1, 1, 4);
 

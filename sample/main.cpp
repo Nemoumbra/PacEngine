@@ -13,6 +13,17 @@
 
 namespace fs = std::filesystem;
 
+
+fs::path ask_path() {
+    std::cout << "Enter the PAC filename\n";
+
+    std::string line;
+    std::getline(std::cin, line);
+
+    fs::path path = line;
+    return path;
+}
+
 std::optional<std::vector<uint8_t>> read_file(const fs::path& path) {
     std::ifstream source(path, std::ios::binary);
     if (!source) {
@@ -39,22 +50,12 @@ std::optional<std::vector<uint8_t>> get_example_file() {
     return data;
 }
 
-fs::path ask_path() {
-    std::cout << "Enter the PAC filename\n";
-
-    std::string line;
-    std::getline(std::cin, line);
-
-    fs::path path = line;
-    return path;
-}
-
-
 int main() {
     PacGlobalRuntime runtime{0x200, 0x200};
     PacContext ctx{0x48, 0x48, 1};
+
     DefaultController sec_0x0;
-    ScriptController sec_0x10;
+    ScriptController sec_0x10{&ctx};
 
 
     ctx.set_runtime(&runtime);

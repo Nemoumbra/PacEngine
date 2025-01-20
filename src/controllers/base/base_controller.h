@@ -9,8 +9,11 @@
 struct BasePacContext;
 
 #define REGISTER_COMMAND(command_name) void command_name(BasePacContext* ctx, int sec_id, int instr_id)
+#define COMMAND_IMPLEMENTATION(ctl, name) void ctl::name(BasePacContext *ctx, int sec_id, int instr_id)
+
 #define REGISTER_TABLE_CMD(ctl, id, cmd_name) {id, static_cast<Handler>(&ctl::cmd_name), #cmd_name},
 #define REGISTER_TABLE_BEGIN {0x0, nullptr, "null"},
+
 #define LOG_ME Debugger::PrintLog("{}\n", this->instructions[instr_id].name);
 
 
