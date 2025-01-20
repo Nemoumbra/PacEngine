@@ -20,7 +20,7 @@ static Instruction instructions[] = {
 
 constexpr auto instructions_cnt = sizeof(instructions) / sizeof(instructions[0]);
 
-ScriptController::ScriptController(BasePacContext* ctx):
+ScriptController::ScriptController(PacContext* ctx):
         ScriptControllerBase(0x10, ::instructions, instructions_cnt), context(ctx) {}
 
 
@@ -38,8 +38,7 @@ COMMAND_IMPLEMENTATION(ScriptController, setScriptLabelTable)
 
     auto offset_arg = ctx->getArgValuePtr(0, 0, 4);
     if (context) {
-        // TODO fix the ctx to PacContext*
-        // ctx->set_script_label_table(offset_arg->as_int);
+        context->set_script_label_table(offset_arg->as_int);
     }
     ctx->setCmdId(0x0);
 }

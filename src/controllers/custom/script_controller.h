@@ -5,11 +5,12 @@
 #pragma once
 
 #include "../custom/script_controller_base.h"
+#include "../../context/pac_context.h"
 
 struct ScriptController : ScriptControllerBase {
-    BasePacContext* context;
+    PacContext* context;
 
-    explicit ScriptController(BasePacContext* ctx);
+    explicit ScriptController(PacContext* ctx);
 
     ~ScriptController() override = default;
 
