@@ -26,6 +26,14 @@ union PacArgValue {
     uint32_t index;
 };
 
+constexpr uint32_t cast_arg_to_int(PacArgType arg_type, PacArgValue* arg) {
+    return is_not_float_arg(arg_type) ? arg->as_int : static_cast<uint32_t>(arg->as_float);
+}
+
+constexpr float cast_arg_to_float(PacArgType arg_type, PacArgValue* arg) {
+    return is_not_float_arg(arg_type) ? static_cast<float>(arg->as_int) : arg->as_float;
+}
+
 struct PacArgument {
     PacArgType type;
     PacArgValue value;
