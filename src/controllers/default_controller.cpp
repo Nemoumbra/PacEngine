@@ -465,37 +465,424 @@ COMMAND_IMPLEMENTATION(DefaultController, cmd_iror)
 }
 
 COMMAND_IMPLEMENTATION(DefaultController, cmd_ifEQ)
-{ }
+{
+    auto arg_1 = ctx->getArgValuePtr(0, 1, 4);
+    auto arg_2 = ctx->getArgValuePtr(1, 1, 4);
+    auto dest = ctx->getArgValuePtr(2, 0, 4);
+
+    auto type_1 = ctx->get_arg_type(0);
+    auto type_2 = ctx->get_arg_type(1);
+
+    if (is_not_float_arg(type_1)) {
+        auto operand = cast_arg_to_int(type_2, arg_2);
+        if (arg_1->as_int == operand) {
+            ctx->seek(dest->index, PacSeekMode::absolute);
+        }
+    }
+    else {
+        auto operand = cast_arg_to_float(type_2, arg_2);
+        if (arg_1->as_float == operand) {
+            ctx->seek(dest->index, PacSeekMode::absolute);
+        }
+    }
+
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_ifNE)
-{ }
+{
+    auto arg_1 = ctx->getArgValuePtr(0, 1, 4);
+    auto arg_2 = ctx->getArgValuePtr(1, 1, 4);
+    auto dest = ctx->getArgValuePtr(2, 0, 4);
+
+    auto type_1 = ctx->get_arg_type(0);
+    auto type_2 = ctx->get_arg_type(1);
+
+    ctx->debug_logger(0);
+    ctx->debug_logger(1);
+    ctx->debug_logger(2);
+
+    if (is_not_float_arg(type_1)) {
+        auto operand = cast_arg_to_int(type_2, arg_2);
+        if (arg_1->as_int != operand) {
+            ctx->seek(dest->index, PacSeekMode::absolute);
+        }
+    }
+    else {
+        auto operand = cast_arg_to_float(type_2, arg_2);
+        if (arg_1->as_float != operand) {
+            ctx->seek(dest->index, PacSeekMode::absolute);
+        }
+    }
+
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_ifLSE)
-{ }
+{
+    auto arg_1 = ctx->getArgValuePtr(0, 1, 4);
+    auto arg_2 = ctx->getArgValuePtr(1, 1, 4);
+    auto dest = ctx->getArgValuePtr(2, 0, 4);
+
+    auto type_1 = ctx->get_arg_type(0);
+    auto type_2 = ctx->get_arg_type(1);
+
+    ctx->debug_logger(0);
+    ctx->debug_logger(1);
+    ctx->debug_logger(2);
+
+    if (is_not_float_arg(type_1)) {
+        auto operand = cast_arg_to_int(type_2, arg_2);
+        if (arg_1->as_int <= operand) {
+            ctx->seek(dest->index, PacSeekMode::absolute);
+        }
+    }
+    else {
+        auto operand = cast_arg_to_float(type_2, arg_2);
+        if (arg_1->as_float <= operand) {
+            ctx->seek(dest->index, PacSeekMode::absolute);
+        }
+    }
+
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_ifLBE)
-{ }
+{
+    auto arg_1 = ctx->getArgValuePtr(0, 1, 4);
+    auto arg_2 = ctx->getArgValuePtr(1, 1, 4);
+    auto dest = ctx->getArgValuePtr(2, 0, 4);
+
+    auto type_1 = ctx->get_arg_type(0);
+    auto type_2 = ctx->get_arg_type(1);
+
+    ctx->debug_logger(0);
+    ctx->debug_logger(1);
+    ctx->debug_logger(2);
+
+    if (is_not_float_arg(type_1)) {
+        auto operand = cast_arg_to_int(type_2, arg_2);
+        if (arg_1->as_int >= operand) {
+            ctx->seek(dest->index, PacSeekMode::absolute);
+        }
+    }
+    else {
+        auto operand = cast_arg_to_float(type_2, arg_2);
+        if (arg_1->as_float >= operand) {
+            ctx->seek(dest->index, PacSeekMode::absolute);
+        }
+    }
+
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_ifLS)
-{ }
+{
+    auto arg_1 = ctx->getArgValuePtr(0, 1, 4);
+    auto arg_2 = ctx->getArgValuePtr(1, 1, 4);
+    auto dest = ctx->getArgValuePtr(2, 0, 4);
+
+    auto type_1 = ctx->get_arg_type(0);
+    auto type_2 = ctx->get_arg_type(1);
+
+    ctx->debug_logger(0);
+    ctx->debug_logger(1);
+    ctx->debug_logger(2);
+
+    if (is_not_float_arg(type_1)) {
+        auto operand = cast_arg_to_int(type_2, arg_2);
+        if (arg_1->as_int < operand) {
+            ctx->seek(dest->index, PacSeekMode::absolute);
+        }
+    }
+    else {
+        auto operand = cast_arg_to_float(type_2, arg_2);
+        if (arg_1->as_float < operand) {
+            ctx->seek(dest->index, PacSeekMode::absolute);
+        }
+    }
+
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_ifLB)
-{ }
+{
+    auto arg_1 = ctx->getArgValuePtr(0, 1, 4);
+    auto arg_2 = ctx->getArgValuePtr(1, 1, 4);
+    auto dest = ctx->getArgValuePtr(2, 0, 4);
+
+    auto type_1 = ctx->get_arg_type(0);
+    auto type_2 = ctx->get_arg_type(1);
+
+    ctx->debug_logger(0);
+    ctx->debug_logger(1);
+    ctx->debug_logger(2);
+
+    if (is_not_float_arg(type_1)) {
+        auto operand = cast_arg_to_int(type_2, arg_2);
+        if (arg_1->as_int > operand) {
+            ctx->seek(dest->index, PacSeekMode::absolute);
+        }
+    }
+    else {
+        auto operand = cast_arg_to_float(type_2, arg_2);
+        if (arg_1->as_float > operand) {
+            ctx->seek(dest->index, PacSeekMode::absolute);
+        }
+    }
+
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_ifAND)
-{ }
+{
+    auto arg_1 = ctx->getArgValuePtr(0, 1, 4);
+    auto arg_2 = ctx->getArgValuePtr(1, 1, 4);
+    auto dest = ctx->getArgValuePtr(2, 0, 4);
+
+    ctx->debug_logger(0);
+    ctx->debug_logger(1);
+    ctx->debug_logger(2);
+
+    if ((arg_1->as_int & arg_2->as_int) != 0) {
+        ctx->seek(dest->index, PacSeekMode::absolute);
+    }
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_ifOR)
-{ }
+{
+    auto arg_1 = ctx->getArgValuePtr(0, 1, 4);
+    auto arg_2 = ctx->getArgValuePtr(1, 1, 4);
+    auto dest = ctx->getArgValuePtr(2, 0, 4);
+
+    ctx->debug_logger(0);
+    ctx->debug_logger(1);
+    ctx->debug_logger(2);
+
+    if ((arg_1->as_int | arg_2->as_int) != 0) {
+        ctx->seek(dest->index, PacSeekMode::absolute);
+    }
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_ifCallEQ)
-{ }
+{
+    auto arg_1 = ctx->getArgValuePtr(0, 1, 4);
+    auto arg_2 = ctx->getArgValuePtr(1, 1, 4);
+    auto dest = ctx->getArgValuePtr(2, 0, 4);
+
+    auto type_1 = ctx->get_arg_type(0);
+    auto type_2 = ctx->get_arg_type(1);
+
+    if (is_not_float_arg(type_1)) {
+        auto operand = cast_arg_to_int(type_2, arg_2);
+        if (arg_1->as_int == operand) {
+            ctx->save_return_address();
+            ctx->seek(dest->index, PacSeekMode::absolute);
+        }
+    }
+    else {
+        auto operand = cast_arg_to_float(type_2, arg_2);
+        if (arg_1->as_float == operand) {
+            ctx->save_return_address();
+            ctx->seek(dest->index, PacSeekMode::absolute);
+        }
+    }
+
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_ifCallNE)
-{ }
+{
+    auto arg_1 = ctx->getArgValuePtr(0, 1, 4);
+    auto arg_2 = ctx->getArgValuePtr(1, 1, 4);
+    auto dest = ctx->getArgValuePtr(2, 0, 4);
+
+    auto type_1 = ctx->get_arg_type(0);
+    auto type_2 = ctx->get_arg_type(1);
+
+    ctx->debug_logger(0);
+    ctx->debug_logger(1);
+    ctx->debug_logger(2);
+
+    if (is_not_float_arg(type_1)) {
+        auto operand = cast_arg_to_int(type_2, arg_2);
+        if (arg_1->as_int != operand) {
+            ctx->save_return_address();
+            ctx->seek(dest->index, PacSeekMode::absolute);
+        }
+    }
+    else {
+        auto operand = cast_arg_to_float(type_2, arg_2);
+        if (arg_1->as_float != operand) {
+            ctx->save_return_address();
+            ctx->seek(dest->index, PacSeekMode::absolute);
+        }
+    }
+
+    ctx->setCmdId(0);
+
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_ifCallLSE)
-{ }
+{
+    auto arg_1 = ctx->getArgValuePtr(0, 1, 4);
+    auto arg_2 = ctx->getArgValuePtr(1, 1, 4);
+    auto dest = ctx->getArgValuePtr(2, 0, 4);
+
+    auto type_1 = ctx->get_arg_type(0);
+    auto type_2 = ctx->get_arg_type(1);
+
+    ctx->debug_logger(0);
+    ctx->debug_logger(1);
+    ctx->debug_logger(2);
+
+    if (is_not_float_arg(type_1)) {
+        auto operand = cast_arg_to_int(type_2, arg_2);
+        if (arg_1->as_int <= operand) {
+            ctx->save_return_address();
+            ctx->seek(dest->index, PacSeekMode::absolute);
+        }
+    }
+    else {
+        auto operand = cast_arg_to_float(type_2, arg_2);
+        if (arg_1->as_float <= operand) {
+            ctx->save_return_address();
+            ctx->seek(dest->index, PacSeekMode::absolute);
+        }
+    }
+
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_ifCallLBE)
-{ }
+{
+    auto arg_1 = ctx->getArgValuePtr(0, 1, 4);
+    auto arg_2 = ctx->getArgValuePtr(1, 1, 4);
+    auto dest = ctx->getArgValuePtr(2, 0, 4);
+
+    auto type_1 = ctx->get_arg_type(0);
+    auto type_2 = ctx->get_arg_type(1);
+
+    ctx->debug_logger(0);
+    ctx->debug_logger(1);
+    ctx->debug_logger(2);
+
+    if (is_not_float_arg(type_1)) {
+        auto operand = cast_arg_to_int(type_2, arg_2);
+        if (arg_1->as_int >= operand) {
+            ctx->save_return_address();
+            ctx->seek(dest->index, PacSeekMode::absolute);
+        }
+    }
+    else {
+        auto operand = cast_arg_to_float(type_2, arg_2);
+        if (arg_1->as_float >= operand) {
+            ctx->save_return_address();
+            ctx->seek(dest->index, PacSeekMode::absolute);
+        }
+    }
+
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_ifCallLS)
-{ }
+{
+    auto arg_1 = ctx->getArgValuePtr(0, 1, 4);
+    auto arg_2 = ctx->getArgValuePtr(1, 1, 4);
+    auto dest = ctx->getArgValuePtr(2, 0, 4);
+
+    auto type_1 = ctx->get_arg_type(0);
+    auto type_2 = ctx->get_arg_type(1);
+
+    ctx->debug_logger(0);
+    ctx->debug_logger(1);
+    ctx->debug_logger(2);
+
+    if (is_not_float_arg(type_1)) {
+        auto operand = cast_arg_to_int(type_2, arg_2);
+        if (arg_1->as_int < operand) {
+            ctx->save_return_address();
+            ctx->seek(dest->index, PacSeekMode::absolute);
+        }
+    }
+    else {
+        auto operand = cast_arg_to_float(type_2, arg_2);
+        if (arg_1->as_float < operand) {
+            ctx->save_return_address();
+            ctx->seek(dest->index, PacSeekMode::absolute);
+        }
+    }
+
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_ifCallLB)
-{ }
+{
+    auto arg_1 = ctx->getArgValuePtr(0, 1, 4);
+    auto arg_2 = ctx->getArgValuePtr(1, 1, 4);
+    auto dest = ctx->getArgValuePtr(2, 0, 4);
+
+    auto type_1 = ctx->get_arg_type(0);
+    auto type_2 = ctx->get_arg_type(1);
+
+    ctx->debug_logger(0);
+    ctx->debug_logger(1);
+    ctx->debug_logger(2);
+
+    if (is_not_float_arg(type_1)) {
+        auto operand = cast_arg_to_int(type_2, arg_2);
+        if (arg_1->as_int > operand) {
+            ctx->save_return_address();
+            ctx->seek(dest->index, PacSeekMode::absolute);
+        }
+    }
+    else {
+        auto operand = cast_arg_to_float(type_2, arg_2);
+        if (arg_1->as_float > operand) {
+            ctx->save_return_address();
+            ctx->seek(dest->index, PacSeekMode::absolute);
+        }
+    }
+
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_ifCallAND)
-{ }
+{
+    auto arg_1 = ctx->getArgValuePtr(0, 1, 4);
+    auto arg_2 = ctx->getArgValuePtr(1, 1, 4);
+    auto dest = ctx->getArgValuePtr(2, 0, 4);
+
+    ctx->debug_logger(0);
+    ctx->debug_logger(1);
+    ctx->debug_logger(2);
+
+    if ((arg_1->as_int & arg_2->as_int) != 0) {
+        ctx->save_return_address();
+        ctx->seek(dest->index, PacSeekMode::absolute);
+    }
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_ifCallOR)
-{ }
+{
+    auto arg_1 = ctx->getArgValuePtr(0, 1, 4);
+    auto arg_2 = ctx->getArgValuePtr(1, 1, 4);
+    auto dest = ctx->getArgValuePtr(2, 0, 4);
+
+    ctx->debug_logger(0);
+    ctx->debug_logger(1);
+    ctx->debug_logger(2);
+
+    if ((arg_1->as_int | arg_2->as_int) != 0) {
+        ctx->save_return_address();
+        ctx->seek(dest->index, PacSeekMode::absolute);
+    }
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_flgSet)
 { }
 COMMAND_IMPLEMENTATION(DefaultController, cmd_flgClr)
