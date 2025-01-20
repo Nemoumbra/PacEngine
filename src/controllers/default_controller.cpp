@@ -884,37 +884,214 @@ COMMAND_IMPLEMENTATION(DefaultController, cmd_ifCallOR)
 }
 
 COMMAND_IMPLEMENTATION(DefaultController, cmd_flgSet)
-{ }
+{
+    auto flags = ctx->get_flags();
+    auto args_cnt = ctx->getArgValuePtr(0, 0, 1);
+
+    for (uint32_t i = 0; i < args_cnt->as_int; ++i) {
+        auto flag_idx = ctx->getArgValuePtr(1, 0, 4);
+        set_flag(flags->flags_ptr, flag_idx->as_int);
+    }
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_flgClr)
-{ }
+{
+    auto flags = ctx->get_flags();
+    auto args_cnt = ctx->getArgValuePtr(0, 0, 1);
+    for (uint32_t i = 0; i < args_cnt->as_int; ++i) {
+        auto flag_idx = ctx->getArgValuePtr(1, 0, 4);
+        unset_flag(flags->flags_ptr, flag_idx->as_int);
+    }
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_flgSetId)
-{ }
+{
+    auto flags = ctx->get_flags();
+    auto flag_idx = ctx->getArgValuePtr(0, 1, 4);
+    set_flag(flags->flags_ptr, flag_idx->as_int);
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_flgClrId)
-{ }
+{
+    auto flags = ctx->get_flags();
+    auto flag_idx = ctx->getArgValuePtr(0, 1, 4);
+    unset_flag(flags->flags_ptr, flag_idx->as_int);
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_flgMov)
-{ }
+{
+    auto flags = ctx->get_flags();
+
+    auto arg_1 = ctx->getArgValuePtr(0, 1, 4);
+    auto arg_2 = ctx->getArgValuePtr(1, 1, 4);
+
+    ctx->debug_logger(0);
+    ctx->debug_logger(1);
+
+    auto flag_value = get_flag(flags->flags_ptr, arg_2->as_int);
+    if (flag_value) {
+        set_flag(flags->flags_ptr, arg_1->as_int);
+    }
+    else {
+        unset_flag(flags->flags_ptr, arg_1->as_int);
+    }
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_flgAND)
-{ }
+{
+    auto flags = ctx->get_flags();
+    auto dest = ctx->getArgValuePtr(0, 0, 4);
+    auto args_cnt = ctx->getArgValuePtr(1, 0, 1);
+
+    bool all_set = true;
+    for (uint32_t i = 0; i < args_cnt->as_int; ++i) {
+        auto flag_idx = ctx->getArgValuePtr(2, 0, 4);
+
+        auto flag_value = get_flag(flags->flags_ptr, flag_idx->as_int);
+        if (!flag_value) {
+            all_set = false;
+            // Can't break, gotta read all args
+        }
+    }
+    if (all_set) {
+        ctx->seek(dest->index, PacSeekMode::absolute);
+    }
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_flgOR)
-{ }
+{
+    auto flags = ctx->get_flags();
+    auto dest = ctx->getArgValuePtr(0, 0, 4);
+    auto args_cnt = ctx->getArgValuePtr(1, 0, 1);
+
+    bool any_set = false;
+    for (uint32_t i = 0; i < args_cnt->as_int; ++i) {
+        auto flag_idx = ctx->getArgValuePtr(2, 0, 4);
+
+        auto flag_value = get_flag(flags->flags_ptr, flag_idx->as_int);
+        if (flag_value) {
+            any_set = true;
+            // Can't break, gotta read all args
+        }
+    }
+    if (any_set) {
+        ctx->seek(dest->index, PacSeekMode::absolute);
+    }
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_flgZERO)
-{ }
+{
+    auto flags = ctx->get_flags();
+    auto dest = ctx->getArgValuePtr(0, 0, 4);
+    auto args_cnt = ctx->getArgValuePtr(1, 0, 1);
+
+    bool none_set = true;
+    for (uint32_t i = 0; i < args_cnt->as_int; ++i) {
+        auto flag_idx = ctx->getArgValuePtr(2, 0, 4);
+
+        auto flag_value = get_flag(flags->flags_ptr, flag_idx->as_int);
+        if (flag_value) {
+            none_set = false;
+            // Can't break, gotta read all args
+        }
+    }
+    if (none_set) {
+        ctx->seek(dest->index, PacSeekMode::absolute);
+    }
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_inxJmp)
-{ }
+{
+    auto index = ctx->getArgValuePtr(0, 1, 4);
+    ctx->seek(index->as_int * sizeof(uint32_t), PacSeekMode::relative);
+    auto dest = ctx->getArgValuePtr(1, 0, 4);
+    ctx->seek(dest->index, PacSeekMode::absolute);
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_stkDec)
-{ }
+{
+    auto undone = ctx->get_undone_calls_count();
+    if (undone == 0) {
+        ctx->set_blocks_count(ctx->get_blocks_count() - 1);
+    }
+    else {
+        ctx->undo_call_if_pending();
+    }
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_stkClr)
-{ }
+{
+    ctx->set_blocks_count(0);
+    ctx->set_undone_calls_count(0);
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_break)
-{ }
+{
+    char buffer[256];
+
+    auto unk = ctx->getArgValuePtr(0, 1, 4);
+    ctx->get_string_argument(buffer);
+
+    // Using the implementation from Fate Tiger Colosseum
+    Debugger::PrintLog("<<<< TALK BREAK >>>>\n");
+    Debugger::PrintLog("{}\n", buffer);
+
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_string)
-{ }
+{
+    char buffer[256];
+    ctx->get_string_argument(buffer);
+    // TODO: add the implementation from Fate Tiger Colosseum
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_print)
-{ }
+{
+    char buffer[256];
+    ctx->get_string_argument(buffer);
+    // TODO: add the implementation from Fate Tiger Colosseum
+
+    ctx->getArgValuePtr(0, 1, 4);
+    auto arg = ctx->get_arg_ptr(0);
+    auto type = ctx->get_arg_type(0);
+
+    if (is_not_float_arg(type)) {
+
+    }
+    else {
+
+    }
+
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_textOut)
-{ }
+{
+    auto arg = ctx->getArgValuePtr(0, 1, 4);
+    ctx->set_logging_settings(arg->as_int);
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_setSleep)
-{ }
+{
+    auto arg = ctx->getArgValuePtr(0, 1, 4);
+    ctx->set_is_sleeping(arg->as_int != 0);
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_sinf)
 { }
 COMMAND_IMPLEMENTATION(DefaultController, cmd_cosf)
