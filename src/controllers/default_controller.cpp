@@ -18,7 +18,6 @@ static bool MT_ctx_seeded = false;
 static bool str_enabled = true;
 
 
-// TODO: macro this
 static Instruction instructions[] = {
         REGISTER_TABLE_BEGIN
         REGISTER_TABLE_CMD(DefaultController, 0x1, cmd_end)

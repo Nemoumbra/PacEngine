@@ -7,7 +7,6 @@
 #include "../../debugger/debugger.h"
 
 
-// TODO: generate this from a list of names and the controller's name
 static Instruction instructions[] = {
         REGISTER_TABLE_BEGIN
         REGISTER_TABLE_CMD(ScriptController, 0x1, dummy)
@@ -16,6 +15,17 @@ static Instruction instructions[] = {
         REGISTER_TABLE_CMD(ScriptController, 0x4, callScriptLabelId)
         REGISTER_TABLE_CMD(ScriptController, 0x5, setCommandMonitor)
         REGISTER_TABLE_CMD(ScriptController, 0x6, getPack)
+        REGISTER_TABLE_CMD(ScriptController, 0x7, labelToInt)
+        REGISTER_TABLE_CMD(ScriptController, 0x8, createScript)
+        REGISTER_TABLE_CMD(ScriptController, 0x9, setGroupId)
+        REGISTER_TABLE_CMD(ScriptController, 0xa, getGroupId)
+        REGISTER_TABLE_CMD(ScriptController, 0xb, getParentGroupId)
+        REGISTER_TABLE_CMD(ScriptController, 0xc, killChildren)
+        REGISTER_TABLE_CMD(ScriptController, 0xd, killScript)
+        REGISTER_TABLE_CMD(ScriptController, 0xe, setAddress)
+        REGISTER_TABLE_CMD(ScriptController, 0xf, setLocalValue)
+        REGISTER_TABLE_CMD(ScriptController, 0x10, getLocalValue)
+
 };
 
 constexpr auto instructions_cnt = sizeof(instructions) / sizeof(instructions[0]);
@@ -76,7 +86,7 @@ COMMAND_IMPLEMENTATION(ScriptController, getPack)
 
     auto out = ctx->getArgValuePtr(0, 1, 4);
     if (context) {
-        auto start = ctx->get_pac_start();
+        auto start = context->get_pac_start();
         // NO!!! 8-byte pointers!
 
         uint32_t value;
@@ -86,3 +96,24 @@ COMMAND_IMPLEMENTATION(ScriptController, getPack)
     }
     ctx->setCmdId(0x0);
 }
+
+COMMAND_IMPLEMENTATION(ScriptController, labelToInt)
+{ }
+COMMAND_IMPLEMENTATION(ScriptController, createScript)
+{ }
+COMMAND_IMPLEMENTATION(ScriptController, setGroupId)
+{ }
+COMMAND_IMPLEMENTATION(ScriptController, getGroupId)
+{ }
+COMMAND_IMPLEMENTATION(ScriptController, getParentGroupId)
+{ }
+COMMAND_IMPLEMENTATION(ScriptController, killChildren)
+{ }
+COMMAND_IMPLEMENTATION(ScriptController, killScript)
+{ }
+COMMAND_IMPLEMENTATION(ScriptController, setAddress)
+{ }
+COMMAND_IMPLEMENTATION(ScriptController, setLocalValue)
+{ }
+COMMAND_IMPLEMENTATION(ScriptController, getLocalValue)
+{ }

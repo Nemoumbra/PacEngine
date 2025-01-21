@@ -20,4 +20,15 @@ struct ScriptController : ScriptControllerBase {
     REGISTER_COMMAND(callScriptLabelId);
     REGISTER_COMMAND(setCommandMonitor);
     REGISTER_COMMAND(getPack);
+    REGISTER_COMMAND(labelToInt);
+    REGISTER_COMMAND(createScript);
+    REGISTER_COMMAND(setGroupId);
+    REGISTER_COMMAND(getGroupId);
+    REGISTER_COMMAND(getParentGroupId);
+    REGISTER_COMMAND(killChildren);
+    REGISTER_COMMAND(killScript);
+    REGISTER_COMMAND(setAddress);
+    REGISTER_COMMAND(setLocalValue);
+    REGISTER_COMMAND(getLocalValue);
+
 };
