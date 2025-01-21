@@ -1391,8 +1391,64 @@ COMMAND_IMPLEMENTATION(DefaultController, cmd_getArray)
 }
 
 COMMAND_IMPLEMENTATION(DefaultController, cmd_F32toF16)
-{ }
+{
+    auto out = ctx->getArgValuePtr(0, 1, 4);
+    auto value_arg = ctx->getArgValuePtr(1, 1, 4);
+
+    uint32_t value = value_arg->as_int;
+    uint32_t result = 0;
+
+    if (value != 0) {
+        result = ((value & 0x7f800000) >> 0x17) - 0x70;
+        if ((int)result < 0) {
+            out->as_int = 0;
+            goto lab_done;
+        }
+        if (0x1f < (int)result) {
+            result = 0x1f;
+        }
+        result = (value & 0x7fffff) >> 0xd | (value & 0x80000000) >> 0x10 | (result & 0x1f) << 10;
+    }
+    out->as_int = result;
+
+lab_done:
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_F16toF32)
-{ }
+{
+    auto out = ctx->getArgValuePtr(0, 1, 4);
+    auto value_arg = ctx->getArgValuePtr(1, 1, 4);
+
+    uint16_t value;
+    std::memcpy(&value, &value_arg->as_int, sizeof(uint16_t));
+
+    uint32_t result = 0;
+    if (value != 0) {
+        result = (value & 0x3ff) << 0xd |
+                 (value & 0x8000) << 0x10 | (((value & 0x7c00) >> 10) + 0x70) * 0x800000;
+    }
+
+    out->as_float = std::bit_cast<float>(result);
+    ctx->setCmdId(0);
+}
 COMMAND_IMPLEMENTATION(DefaultController, cmd_getElapsedTime)
-{ }
+{
+    auto out = ctx->getArgValuePtr(0, 1, 4);
+
+    auto dt = ctx->get_time_delta();
+
+    // TODO: RE this and add to the debugger
+    uint32_t uVar1 = 1; // real_time_related_08875d44(1.0);
+    float divisor = 0;
+    if ((int)uVar1 < 0) {
+        divisor = (float)(uVar1 >> 1 | uVar1 & 1);
+        divisor = divisor + divisor;
+    }
+    else {
+        divisor = (float)uVar1;
+    }
+    out->as_float = (float)dt / divisor;
+
+    ctx->setCmdId(0);
+}
