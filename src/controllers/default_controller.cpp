@@ -8,6 +8,7 @@
 #include "../debugger/debugger.h"
 
 #include <random>
+#include <cmath>
 
 
 static std::mt19937 MT_ctx;
@@ -1093,15 +1094,72 @@ COMMAND_IMPLEMENTATION(DefaultController, cmd_setSleep)
 }
 
 COMMAND_IMPLEMENTATION(DefaultController, cmd_sinf)
-{ }
+{
+    auto arg_1 = ctx->getArgValuePtr(0, 1, 4);
+    auto arg_2 = ctx->getArgValuePtr(1, 1, 4);
+
+    auto type_1 = ctx->get_arg_type(0);
+    auto value = cast_arg_to_float(type_1, arg_1);
+
+    arg_2->as_float = std::sinf((value * 2.0 * 3.141593) / 360.0);
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_cosf)
-{ }
+{
+    auto arg_1 = ctx->getArgValuePtr(0, 1, 4);
+    auto arg_2 = ctx->getArgValuePtr(1, 1, 4);
+
+    auto type_1 = ctx->get_arg_type(0);
+    auto value = cast_arg_to_float(type_1, arg_1);
+
+    arg_2->as_float = std::cosf((value * 2.0 * 3.141593) / 360.0);
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_atan2f)
-{ }
+{
+    auto arg_1 = ctx->getArgValuePtr(0, 1, 4);
+    auto arg_2 = ctx->getArgValuePtr(1, 1, 4);
+    auto arg_3 = ctx->getArgValuePtr(2, 1, 4);
+
+    auto value = std::atan2f(arg_1->as_float, arg_2->as_float);
+    arg_3->as_float = (value * 180.0) / 3.141593;
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_abs)
-{ }
+{
+    auto arg_1 = ctx->getArgValuePtr(0, 1, 4);
+    auto arg_2 = ctx->getArgValuePtr(1, 1, 4);
+
+    auto type_1 = ctx->get_arg_type(0);
+    auto type_2 = ctx->get_arg_type(1);
+
+    auto value = cast_arg_to_float(type_1, arg_1);
+
+    if (is_not_float_arg(type_2)) {
+        arg_2->as_int = static_cast<uint32_t>(std::fabs(value));
+    }
+    else {
+        arg_2->as_float = std::fabs(value);
+    }
+
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_sqrt)
-{ }
+{
+    auto arg_1 = ctx->getArgValuePtr(0, 1, 4);
+    auto arg_2 = ctx->getArgValuePtr(1, 1, 4);
+
+    auto type_1 = ctx->get_arg_type(0);
+
+    auto value = cast_arg_to_float(type_1, arg_1);
+    arg_2->as_float = std::sqrt(value);
+
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_setLabelId)
 { }
 COMMAND_IMPLEMENTATION(DefaultController, cmd_callLabelId)
