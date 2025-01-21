@@ -9,6 +9,7 @@
 
 class PacContext: public DerivedPacContext {
 protected:
+    friend class ScriptController;
     uint32_t unknown3;
     void* script_manager;
     PacContext* parent_ctx;

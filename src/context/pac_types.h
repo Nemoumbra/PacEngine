@@ -20,6 +20,18 @@ constexpr bool is_not_float_arg(PacArgType type) {
     return (type & (FloatImm | FloatLocal | FloatGlobal)) == 0;
 }
 
+constexpr bool is_int_reg(PacArgType type) {
+    return (type & (IntLocal | IntGlobal)) != 0;
+}
+
+constexpr bool is_local_int_reg(PacArgType type) {
+    return (type & IntLocal) != 0;
+}
+
+constexpr bool is_local_float_reg(PacArgType type) {
+    return (type & FloatLocal) != 0;
+}
+
 union PacArgValue {
     uint32_t as_int;
     float as_float;
