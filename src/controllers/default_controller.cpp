@@ -9,10 +9,13 @@
 
 #include <random>
 #include <cmath>
+#include <cstring>
 
 
 static std::mt19937 MT_ctx;
 static bool MT_ctx_seeded = false;
+
+static bool str_enabled = true;
 
 
 // TODO: macro this
@@ -1161,37 +1164,232 @@ COMMAND_IMPLEMENTATION(DefaultController, cmd_sqrt)
 }
 
 COMMAND_IMPLEMENTATION(DefaultController, cmd_setLabelId)
-{ }
+{
+    auto label_idx = ctx->getArgValuePtr(0, 1, 4);
+    auto value = ctx->getArgValuePtr(1, 0, 4);
+
+    ctx->set_label_value(label_idx->as_int, value->as_int);
+
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_callLabelId)
-{ }
+{
+    auto label_idx = ctx->getArgValuePtr(0, 1, 4);
+    ctx->debug_logger(0);
+    ctx->save_return_address();
+
+    auto dest = ctx->get_label_value(label_idx->as_int);
+    ctx->seek(dest, PacSeekMode::absolute);
+
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_jmpLabelId)
-{ }
+{
+    auto label_idx = ctx->getArgValuePtr(0, 1, 4);
+
+    auto dest = ctx->get_label_value(label_idx->as_int);
+    ctx->seek(dest, PacSeekMode::absolute);
+
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_callLabel)
-{ }
+{
+    auto dest = ctx->getArgValuePtr(0, 1, 4);
+    ctx->save_return_address();
+    ctx->seek(dest->as_int, PacSeekMode::absolute);
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_jmpLabel)
-{ }
+{
+    auto dest = ctx->getArgValuePtr(0, 1, 4);
+    ctx->seek(dest->as_int, PacSeekMode::absolute);
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_mod)
-{ }
+{
+    auto arg_1 = ctx->getArgValuePtr(0, 1, 4);
+    auto arg_2 = ctx->getArgValuePtr(1, 1, 4);
+
+    ctx->debug_logger(0);
+    ctx->debug_logger(1);
+
+    auto value = arg_2->as_int;
+    if (value != 0) {
+        arg_1->as_int %= value;
+    }
+
+    ctx->debug_logger(0);
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_memset)
-{ }
+{
+    auto reg_range = ctx->getArgValuePtr(0, 1, 4);
+    auto value_arg = ctx->getArgValuePtr(1, 1, 4);
+    auto count = ctx->getArgValuePtr(2, 1, 4);
+
+    auto type_1 = ctx->get_arg_type(0);
+    auto type_2 = ctx->get_arg_type(1);
+
+    if (is_not_float_arg(type_1)) {
+        auto value = cast_arg_to_int(type_2, value_arg);
+        for (uint32_t i = 0; i < count->as_int; ++i) {
+            reg_range[i].as_int = value;
+        }
+    }
+    else {
+        auto value = cast_arg_to_float(type_2, value_arg);
+        for (uint32_t i = 0; i < count->as_int; ++i) {
+            reg_range[i].as_float = value;
+        }
+    }
+
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_memcpy)
-{ }
+{
+    auto dst = ctx->getArgValuePtr(0, 1, 4);
+    auto src = ctx->getArgValuePtr(1, 1, 4);
+    auto count = ctx->getArgValuePtr(2, 1, 4);
+
+    std::memcpy(dst, src, count->as_int * sizeof(uint32_t));
+
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_flgMemset)
-{ }
+{
+    auto flags = ctx->get_flags();
+
+    auto start = ctx->getArgValuePtr(0, 1, 4);
+    auto value_arg = ctx->getArgValuePtr(1, 1, 4);
+    auto count = ctx->getArgValuePtr(2, 1, 4);
+
+    auto flag_value = value_arg->as_int == 1;
+    if (flag_value) {
+        for (uint32_t i = 0; i < count->as_int; ++i) {
+            set_flag(flags->flags_ptr, start->as_int + i);
+        }
+    }
+    else {
+        for (uint32_t i = 0; i < count->as_int; ++i) {
+            unset_flag(flags->flags_ptr, start->as_int + i);
+        }
+    }
+
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_flgMemcpy)
-{ }
+{
+    auto flags = ctx->get_flags();
+
+    auto dst = ctx->getArgValuePtr(0, 1, 4);
+    auto src = ctx->getArgValuePtr(1, 1, 4);
+    auto count = ctx->getArgValuePtr(2, 1, 4);
+
+    for (uint32_t i = 0; i < count->as_int; ++i) {
+        auto flag_value = get_flag(flags->flags_ptr, src->as_int + i);
+        if (flag_value) {
+            set_flag(flags->flags_ptr, dst->as_int + i);
+        }
+        else {
+            unset_flag(flags->flags_ptr, dst->as_int + i);
+        }
+    }
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_stringEnable)
-{ }
+{
+    auto value = ctx->getArgValuePtr(0, 1, 4);
+    str_enabled = value->as_int == 1;
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_srand)
-{ }
+{
+    // TODO: hook the debugger to this (expected sceKernelGetSystemTimeLow)
+    MT_ctx.seed(0x0);
+    MT_ctx_seeded = true;
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_initArray)
-{ }
+{
+    auto stack = ctx->get_stack();
+    stack->reset();
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_addArray)
-{ }
+{
+    auto offset = ctx->getArgValuePtr(0, 1, 4);
+    auto out_sp = ctx->getArgValuePtr(1, 1, 4);
+
+    auto stack = ctx->get_stack();
+    auto sp = stack->push_SP(offset->as_int);
+
+    // Sometimes float args end up here!
+    out_sp->as_int = sp;
+
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_setArray)
-{ }
+{
+    auto local_offset = ctx->getArgValuePtr(0, 1, 4);
+    auto frame_offset = ctx->getArgValuePtr(1, 1, 4);
+    auto value_arg = ctx->getArgValuePtr(2, 1, 4);
+
+    auto type_1 = ctx->get_arg_type(1);
+    auto type_2 = ctx->get_arg_type(2);
+
+    auto stack = ctx->get_stack();
+
+    if (is_not_float_arg(type_1)) {
+        auto value = cast_arg_to_int(type_2, value_arg);
+        stack->set_value_int(frame_offset->as_int, local_offset->as_int, value);
+    }
+    else {
+        auto value = cast_arg_to_float(type_2, value_arg);
+        // Yes, frame_offset is a float here, but it stores an integer... IDK why...
+        stack->set_value_float(frame_offset->as_int, local_offset->as_int, value);
+    }
+
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_getArray)
-{ }
+{
+    auto local_offset = ctx->getArgValuePtr(0, 1, 4);
+    auto frame_offset = ctx->getArgValuePtr(1, 1, 4);
+    auto out = ctx->getArgValuePtr(2, 1, 4);
+
+    auto type_1 = ctx->get_arg_type(1);
+    auto type_2 = ctx->get_arg_type(2);
+
+    auto stack = ctx->get_stack();
+    auto stack_value = stack->get_value_ptr(frame_offset->as_int, local_offset->as_int);
+
+    if (is_not_float_arg(type_2)) {
+        auto value = cast_arg_to_int(type_1, stack_value);
+        out->as_int = value;
+    }
+    else {
+        auto value = cast_arg_to_float(type_1, stack_value);
+        out->as_float = value;
+    }
+
+    ctx->setCmdId(0);
+}
+
 COMMAND_IMPLEMENTATION(DefaultController, cmd_F32toF16)
 { }
 COMMAND_IMPLEMENTATION(DefaultController, cmd_F16toF32)

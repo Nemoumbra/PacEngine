@@ -21,19 +21,21 @@ Stack::~Stack() {
     delete[] stack_ptr;
 }
 
-void Stack::push_SP(int32_t offset) {
+uint32_t Stack::push_SP(int32_t offset) {
+    auto old = PAC_SP;
     PAC_SP += offset;
+    return old;
 }
 
-uint32_t* Stack::get_value_ptr(int32_t frame_offset, int32_t local_offset) {
-    return &stack_ptr[frame_offset + local_offset];
+PacArgValue* Stack::get_value_ptr(int32_t frame_offset, int32_t local_offset) {
+    return reinterpret_cast<PacArgValue*>(&stack_ptr[frame_offset + local_offset]);
 }
 
 uint32_t Stack::set_value_int(int frame_offset, int local_offset, uint32_t value) {
     stack_ptr[frame_offset + local_offset] = value;
     return value;
 }
-uint32_t Stack::set_value_float(int frame_offset, int local_offset, float value) {
+float Stack::set_value_float(int frame_offset, int local_offset, float value) {
     stack_ptr[frame_offset + local_offset] = std::bit_cast<uint32_t, float>(value);
     return value;
 }
