@@ -1057,7 +1057,12 @@ COMMAND_IMPLEMENTATION(DefaultController, cmd_string)
 {
     char buffer[256];
     ctx->get_string_argument(buffer);
-    // TODO: add the implementation from Fate Tiger Colosseum
+
+    // The implementation comes from Fate Tiger Colosseum
+    if (str_enabled) {
+        Debugger::PrintLog("{}", buffer);
+    }
+
     ctx->setCmdId(0);
 }
 
@@ -1065,17 +1070,24 @@ COMMAND_IMPLEMENTATION(DefaultController, cmd_print)
 {
     char buffer[256];
     ctx->get_string_argument(buffer);
-    // TODO: add the implementation from Fate Tiger Colosseum
 
+    // The implementation partially comes from Fate Tiger Colosseum
+    if (str_enabled) {
+        Debugger::PrintLog("{}", buffer);
+    }
+    // Discarded on purpose
     ctx->getArgValuePtr(0, 1, 4);
+
     auto arg = ctx->get_arg_ptr(0);
     auto type = ctx->get_arg_type(0);
 
-    if (is_not_float_arg(type)) {
-
-    }
-    else {
-
+    if (str_enabled) {
+        if (is_not_float_arg(type)) {
+            Debugger::PrintLog("{}", arg->as_int);
+        }
+        else {
+            Debugger::PrintLog("{}", arg->as_float);
+        }
     }
 
     ctx->setCmdId(0);
